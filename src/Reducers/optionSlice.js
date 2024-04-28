@@ -12,6 +12,6 @@ export const optionSlice = createSlice({
     }
 })
 
-export const {addGoal} = optionSlice.actions;
+export const {changeOption} = optionSlice.actions;
 
 export default optionSlice.reducer

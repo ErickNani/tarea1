@@ -12,6 +12,11 @@ import { useSelector } from 'react-redux';
 function App() {
   const goals = useSelector((state) => state.goals.value);
   const completedGoals = useSelector((state) => state.goals.completed);
+  const selectedOption = useSelector((state) => state.option.value);
+
+  const filteredGoals = goals.filter(goal => {
+    return selectedOption === 'tasks' ? !goal.completed : goal.completed;
+  });
 
   return (
     <div className="App">
