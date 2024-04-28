@@ -1,0 +1,39 @@
+.custom-card {
+  padding: min(2rem, 5vw) min(2rem, 5vw) min(2.5rem, 5vw);
+  flex: 1 0 50%;
+  margin: min(1.5rem, 2.5vw) 0 0 0;
+  background: hsl(187 75% 64%);
+  border: 0.35rem solid;
+  text-align: center;
+}
+
+
+.DueDateItem {
+  font-family: "Open Sans", sans-serif;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	justify-content: center;
+	align-items: center;
+	background: hsl(195, 44%, 57%);
+}
+.DescripcionItem {
+  font-family: "Open Sans", sans-serif;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	justify-content: center;
+	align-items: center;
+	background: hsl(195, 44%, 57%);
+}
+
+.boton {
+  display: inline-block;
+	color: black;
+	padding: 0.5rem 1rem;
+	text-decoration: none;
+	background: hsl(187 75% 64%);
+	border-radius: 0.6rem;
+	font-weight: 700;
+	border: 0.35rem solid;
+}

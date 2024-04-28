@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Item from './Components/Item/item'
+import Menu from './Components/Menu/menu'
+import Formulario from './Components/Formulario/formulario'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { useSelector } from 'react-redux';
 
 function App() {
+const goals = useSelector((state)=>state.goals.value);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Menu></Menu>
+      <h1>TAREAS PENDIENTES</h1>
+      <Container>
+        <Row>
+          <Col><Formulario></Formulario></Col>
+          <Col>
+          { goals.map((tarea)=>(
+            <Item name={tarea.name} description={tarea.description} dueDate={tarea.dueDate}> </Item>
+          ))}
+          </Col>
+        </Row>
+      </Container>
+
     </div>
   );
 }
