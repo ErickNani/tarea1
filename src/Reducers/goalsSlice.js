@@ -8,7 +8,7 @@ export const goalsSlice = createSlice({
     },
     reducers:{
         addGoal: (state, action) => {
-            state.value.push(action.payload);
+            state.value.push({ ...action.payload, addedFrom: action.payload.addedFrom});
         },
         removeGoal: (state, action) =>{
             const index = state.value.findIndex(goal => goal.id === action.payload.id);

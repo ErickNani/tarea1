@@ -15,7 +15,8 @@ function App() {
   const selectedOption = useSelector((state) => state.option.value);
 
   const filteredGoals = goals.filter(goal => {
-    return selectedOption === 'tasks' ? !goal.completed : goal.completed;
+    const matchesSelectedOption = goal.addedFrom === selectedOption;
+    return matchesSelectedOption
   });
 
   return (
@@ -25,20 +26,26 @@ function App() {
       <Container>
         <Row>
           <Col>
-          <h2>Ingresa una Tarea</h2>
-          <Formulario></Formulario>
+            <h2>Ingresa una Tarea</h2>
+            <Formulario selectedOption={selectedOption}></Formulario>
           </Col>
           <Col>
             <h2>Pending</h2>
-            {goals.map((tarea) => (
+            {filteredGoals.map((tarea) => (
               <Item key={tarea.id} id={tarea.id} name={tarea.name} description={tarea.description} dueDate={tarea.dueDate}> </Item>
             ))}
           </Col>
           <Col>
             <h2>Completed</h2>
-            {completedGoals.map((completedTask) => (
-              <Item key={completedTask.id} id={completedTask.id} name={completedTask.name} description={completedTask.description} dueDate={completedTask.dueDate} style={{ background: 'hsl(0, 86%, 67%)' }}/>
-            ))}
+            {completedGoals
+              .filter(completedTask => completedTask.addedFrom === selectedOption)
+              .map((completedTask) => (
+                <Item
+                  name={completedTask.name}
+                  description={completedTask.description}
+                  dueDate={completedTask.dueDate}
+                />
+              ))}
           </Col>
         </Row>
       </Container>
