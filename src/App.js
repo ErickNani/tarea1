@@ -7,49 +7,102 @@ import Formulario from './Components/Formulario/formulario'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { initAddTask } from './Reducers/tasksSlice'
+import { initAddGoal } from './Reducers/goalsSlice';
+import { changeOption } from './Reducers/optionSlice'
 
 function App() {
+  const selectedOption = useSelector((state) => state.option.value)
   const goals = useSelector((state) => state.goals.value);
-  const completedGoals = useSelector((state) => state.goals.completed);
-  const selectedOption = useSelector((state) => state.option.value);
+  const tasks = useSelector((state) => state.tasks.value);
+  const dispatch = useDispatch();
 
-  const filteredGoals = goals.filter(goal => {
-    const matchesSelectedOption = goal.addedFrom === selectedOption;
-    return matchesSelectedOption
-  });
+  const handleOptionChange = (option) => {
+    dispatch(changeOption(option));
+  };
+
+  function initFetch() {
+    {selectedOption == 'goals' ? (
+      fetch("http://localhost:3001/goals/getGoals", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "123456"
+        }
+      }).then((response) => {
+        return response.json()
+      }).then((response) => {
+        response.map((goal) => {
+          dispatch(initAddGoal(goal));
+        })
+      }).catch(err => {
+        console.log(err);
+      })
+    ) : (
+      fetch("http://localhost:3001/tasks/getTasks", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "123456"
+        }
+      }).then((response) => {
+        return response.json()
+      }).then((response) => {
+        response.map((task) => {
+          dispatch(initAddTask(task));
+        })
+      }).catch(err => {
+        console.log(err);
+      })
+    )}
+
+  }
+  useEffect(() => {
+    initFetch();
+  }, [])
 
   return (
     <div className="App">
-      <Menu></Menu>
-      <h1>TAREAS PENDIENTES</h1>
-      <Container>
-        <Row>
-          <Col>
-            <h2>Ingresa una Tarea</h2>
-            <Formulario selectedOption={selectedOption}></Formulario>
-          </Col>
-          <Col>
-            <h2>Pending</h2>
-            {filteredGoals.map((tarea) => (
-              <Item key={tarea.id} id={tarea.id} name={tarea.name} description={tarea.description} dueDate={tarea.dueDate}> </Item>
-            ))}
-          </Col>
-          <Col>
-            <h2>Completed</h2>
-            {completedGoals
-              .filter(completedTask => completedTask.addedFrom === selectedOption)
-              .map((completedTask) => (
-                <Item
-                  name={completedTask.name}
-                  description={completedTask.description}
-                  dueDate={completedTask.dueDate}
-                />
+      <Menu handleOptionChange={handleOptionChange} />
+      {selectedOption === 'goals' ? (
+        <>
+          <h1>TAREAS PENDIENTES</h1>
+          <Container>
+            <Row>
+              <Col>
+                <h2>Ingresa una Tarea</h2>
+                <Formulario selectedOption={selectedOption}></Formulario>
+              </Col>
+              <Col>
+                <h2>Pending</h2>
+                {goals.map((goal, index) => (
+                  <Item key={index} name={goal.name} description={goal.description} dueDate={goal.dueDate} id={goal.id}> </Item>
+                ))}
+              </Col>
+            </Row>
+          </Container>
+        </>
+      ) : (
+        <>
+        <h1>TAREAS PENDIENTES</h1>
+        <Container>
+          <Row>
+            <Col>
+              <h2>Ingresa una Tarea</h2>
+              <Formulario selectedOption={selectedOption}></Formulario>
+            </Col>
+            <Col>
+              <h2>Pending</h2>
+              {tasks.map((task, index) => (
+                <Item key={index} name={task.name} description={task.description} dueDate={task.dueDate} id={task.id}> </Item>
               ))}
-          </Col>
-        </Row>
-      </Container>
-
+            </Col>
+          </Row>
+        </Container>
+      </>
+      )}
     </div>
   );
 }

@@ -4,9 +4,10 @@ import Container from 'react-bootstrap/Container'
 import './formulario.scss';
 import { useDispatch } from 'react-redux';
 import { addGoal } from '../../Reducers/goalsSlice';
+import { addTask } from '../../Reducers/tasksSlice';
 import { useRef } from 'react';
 
-function Formulario(props) {
+function Formulario({ selectedOption}) {
 
     const inputRefName = useRef();
     const inputRefDescription = useRef();
@@ -15,16 +16,19 @@ function Formulario(props) {
 
     const addItem = (e) => {
         e.preventDefault();
-        const addedFrom = props.selectedOption;
-        dispatch(addGoal({
+        const newItem = {
             'name': inputRefName.current.value,
             'description': inputRefDescription.current.value,
             'dueDate': inputRefDueDate.current.value,
-            'addedFrom': addedFrom
-        }));
+        };
+        if (selectedOption === 'goals') {
+            dispatch(addGoal(newItem));
+        } else {
+            dispatch(addTask(newItem));
+        }
     };
 
-    const buttonText = props.selectedOption === 'goals' ? 'Agregar Meta' : 'Agregar Tarea';
+    const buttonText = selectedOption === 'goals' ? 'Agregar Meta' : 'Agregar Tarea';
 
     return (
         <Container>

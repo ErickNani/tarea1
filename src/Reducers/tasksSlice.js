@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const goalsSlice = createSlice({
+export const tasksSlice = createSlice({
     name: 'goals',
     initialState: {
         value: [],
         completed: [],
     },
     reducers: {
-        addGoal: (state, action) => {
+        addTask: (state, action) => {
             state.value.push({ ...action.payload, addedFrom: action.payload.addedFrom });
-            fetch("http://localhost:3001/goals/addGoals", {
+            fetch("http://localhost:3001/tasks/addTask", {
                 method: "POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -20,13 +20,13 @@ export const goalsSlice = createSlice({
                 console.log(err);
             })
         },
-        initAddGoal: (state, action) => {
+        initAddTask: (state, action) => {
             console.log(action.payload);
             state.value.push(action.payload);
         },
-        removeGoal: (state, action) => {
-            state.value= state.value.filter((goals)=>goals.id!==action.payload);
-            fetch("http://localhost:3001/goals/removeGoals/"+action.payload.id, {
+        removeTask: (state, action) => {
+            state.value= state.value.filter((task)=>task.id!==action.payload);
+            fetch("http://localhost:3001/tasks/removeTask/"+action.payload.id, {
                 method: "DELETE",
                 headers:{
                     "Content-Type":"application/json",
@@ -39,5 +39,5 @@ export const goalsSlice = createSlice({
     },
 });
 
-export const { addGoal,initAddGoal, removeGoal} = goalsSlice.actions;
-export default goalsSlice.reducer;
+export const { addTask,initAddTask, removeTask} = tasksSlice.actions;
+export default tasksSlice.reducer;
