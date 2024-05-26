@@ -39,6 +39,41 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
+To build and run this project using Docker, follow these steps:
+
+### Prerequisites
+
+- Make sure you have [Docker](https://www.docker.com/) installed on your machine.
+
+### Building the Docker Image
+
+1. Open a terminal and navigate to the project directory.
+2. Build the Docker image using the following command:
+   ```bash
+   docker build -t my-react-app .
+
+### Running the Docker Container
+1. After the image is built, you can run a container using the following command:
+
+    docker run -p 4000:80 my-react-app
+2. Open http://localhost:4000 in your browser to view the app.
+
+
+### Dockerfile Explanation
+The Dockerfile is divided into two stages:
+
+1. - Node.js
+    - Base Image: node:20-alpine
+    - Working Directory: /app
+    - Copy and Install Dependencies: The package*.json and package-lock.json files are copied to the working directory, and npm install is run to install dependencies.
+    - Copy Project Files and Build: All project files are copied to the working directory, and npm run build is executed to build the app.
+2. - Nginx
+    - Base Image: nginx:1.19.0
+    - Working Directory: /usr/share/nginx/html
+    - Remove Default Files: The default files in the Nginx HTML directory are removed.
+    - Copy Build Files: The build files from the previous step are copied to the Nginx HTML directory.
+    - Run Nginx: The Nginx server is started with daemon off; to keep it running in the foreground.
+    
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
